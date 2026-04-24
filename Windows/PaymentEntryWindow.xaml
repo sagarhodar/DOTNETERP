@@ -1,0 +1,128 @@
+<Window x:Class="Ojaswat.Windows.PaymentEntryWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Payment Entry" Height="520" Width="560"
+        WindowStartupLocation="CenterOwner" ResizeMode="NoResize"
+        Background="#F8F9FC" FontFamily="Segoe UI">
+    <Window.Resources>
+        <Style x:Key="FL" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="Margin"     Value="0,0,0,4"/>
+        </Style>
+        <Style x:Key="BtnP" TargetType="Button">
+            <Setter Property="Background"      Value="#3B82F6"/>
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Height"          Value="40"/>
+            <Setter Property="Padding"         Value="20,0"/>
+            <Setter Property="FontSize"        Value="13"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BtnG" TargetType="Button" BasedOn="{StaticResource BtnP}">
+            <Setter Property="Background" Value="#F1F5F9"/>
+            <Setter Property="Foreground" Value="#475569"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="56"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="#1E293B" Padding="20,0">
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                <TextBlock Text="💳" FontSize="18" Margin="0,0,10,0" VerticalAlignment="Center"/>
+                <TextBlock x:Name="TitleText" Text="New Payment Entry"
+                           Foreground="White" FontSize="16" FontWeight="Bold" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="24,20,24,8">
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Document No." Style="{StaticResource FL}"/>
+                        <ComboBox x:Name="DocNoCombo" Height="38" FontSize="13"
+                                  IsEditable="True" SelectionChanged="DocNoCombo_Changed"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Party Name" Style="{StaticResource FL}"/>
+                        <TextBox x:Name="PartyNameBox" Height="38" Padding="10,0"
+                                 FontSize="13" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Payment Date" Style="{StaticResource FL}"/>
+                        <DatePicker x:Name="PayDatePicker" Height="38" FontSize="13"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Amount (₹)" Style="{StaticResource FL}"/>
+                        <TextBox x:Name="AmountBox" Height="38" Padding="10,0"
+                                 FontSize="13" VerticalContentAlignment="Center" Text="0.00"/>
+                    </StackPanel>
+                </Grid>
+                <Grid Margin="0,0,0,14">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock Text="Payment Mode" Style="{StaticResource FL}"/>
+                        <ComboBox x:Name="ModeCombo" Height="38" FontSize="13">
+                            <ComboBoxItem Content="Cash"   IsSelected="True"/>
+                            <ComboBoxItem Content="Cheque"/>
+                            <ComboBoxItem Content="NEFT"/>
+                            <ComboBoxItem Content="RTGS"/>
+                            <ComboBoxItem Content="UPI"/>
+                            <ComboBoxItem Content="Other"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2">
+                        <TextBlock Text="Cheque / UTR / Ref No." Style="{StaticResource FL}"/>
+                        <TextBox x:Name="ReferenceBox" Height="38" Padding="10,0"
+                                 FontSize="13" VerticalContentAlignment="Center"/>
+                    </StackPanel>
+                </Grid>
+                <StackPanel Margin="0,0,0,14">
+                    <TextBlock Text="Notes" Style="{StaticResource FL}"/>
+                    <TextBox x:Name="NotesBox" Height="72" Padding="10,8"
+                             FontSize="13" TextWrapping="Wrap" AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"/>
+                </StackPanel>
+                <TextBlock x:Name="StatusText" Foreground="#64748B" FontSize="11"
+                           Margin="0,4,0,0" TextWrapping="Wrap"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                        VerticalAlignment="Center" Margin="0,0,20,0">
+                <Button Content="Cancel" Style="{StaticResource BtnG}"
+                        Width="100" Margin="0,0,10,0" Click="Cancel_Click"/>
+                <Button Content="💾  Save Payment" Style="{StaticResource BtnP}"
+                        Width="160" Click="Save_Click"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

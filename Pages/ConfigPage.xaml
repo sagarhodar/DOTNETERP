@@ -1,0 +1,84 @@
+<UserControl x:Class="Ojaswat.Pages.ConfigPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F1F5F9" FontFamily="Segoe UI">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20,20,20,20">
+            <Border Background="#FFFFFF" CornerRadius="12" Padding="22,18"
+                    BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,16">
+                <StackPanel>
+                    <TextBlock Text="🏢  Company Details" Foreground="#0F172A"
+                               FontSize="14" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left column -->
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Company Name" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgName" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="GSTIN" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgGST" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="State Code (e.g. 24-Gujarat)" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgStateCode" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Phone" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgPhone" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Email" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgEmail" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Address" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgAddress" Height="60" Padding="10,8" FontSize="12"
+                                     TextWrapping="Wrap" AcceptsReturn="True"/>
+                        </StackPanel>
+
+                        <!-- Right column -->
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Bank Name" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgBank" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Account No." Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgAccount" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="IFSC Code" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgIFSC" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Authorised Signatory" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <TextBox x:Name="CfgSignatory" Height="36" Padding="10,0" FontSize="12" VerticalContentAlignment="Center" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="Logo Image Path" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <Grid Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <TextBox x:Name="CfgLogo" Height="36" Padding="10,0" FontSize="11" VerticalContentAlignment="Center"/>
+                                <Button Grid.Column="1" Content="Browse" Click="BrowseLogo_Click"
+                                        Background="#F1F5F9" Foreground="#475569" BorderThickness="0"
+                                        Height="36" Padding="10,0" Margin="6,0,0,0" Cursor="Hand"/>
+                            </Grid>
+
+                            <TextBlock Text="QR Code Image Path (UPI / Bank)" Foreground="#64748B" FontSize="11" FontWeight="SemiBold" Margin="0,0,0,3"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                                <TextBox x:Name="CfgQRCode" Height="36" Padding="10,0" FontSize="11" VerticalContentAlignment="Center"/>
+                                <Button Grid.Column="1" Content="Browse" Click="BrowseQRCode_Click"
+                                        Background="#F1F5F9" Foreground="#475569" BorderThickness="0"
+                                        Height="36" Padding="10,0" Margin="6,0,0,0" Cursor="Hand"/>
+                            </Grid>
+                        </StackPanel>
+                    </Grid>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                        <Button Content="💾  Save Company Settings" Click="Save_Click"
+                                Background="#3B82F6" Foreground="White" BorderThickness="0"
+                                Height="36" Padding="16,0" FontWeight="SemiBold" Cursor="Hand"/>
+                        <TextBlock x:Name="SaveStatus" Foreground="#64748B" FontSize="11"
+                                   VerticalAlignment="Center" Margin="14,0,0,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

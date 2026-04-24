@@ -1,0 +1,533 @@
+<Window x:Class="Ojaswat.Windows.CreateDocumentWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Document Editor"
+        Height="980" Width="1320" MinHeight="760" MinWidth="1080"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Background="#F0F4F8" FontFamily="Segoe UI"
+        TextOptions.TextFormattingMode="Display"
+        TextOptions.TextRenderingMode="ClearType"
+        UseLayoutRounding="True" SnapsToDevicePixels="True">
+
+    <Window.Resources>
+        <Style x:Key="FL" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="#334155"/>
+            <Setter Property="Margin"     Value="0,0,0,5"/>
+        </Style>
+        <Style x:Key="SH" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="13"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#1E293B"/>
+            <Setter Property="Margin"     Value="0,0,0,14"/>
+        </Style>
+        <Style x:Key="Sec" TargetType="Border">
+            <Setter Property="Background"      Value="#FFFFFF"/>
+            <Setter Property="CornerRadius"    Value="10"/>
+            <Setter Property="Padding"         Value="22,18"/>
+            <Setter Property="Margin"          Value="0,0,0,12"/>
+            <Setter Property="BorderBrush"     Value="#CBD5E1"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#94A3B8" BlurRadius="14" ShadowDepth="1" Opacity="0.08" Direction="270"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="SmBtn" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontFamily"      Value="Segoe UI"/>
+            <Setter Property="FontSize"        Value="12"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Height"          Value="34"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                CornerRadius="7" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.82"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.65"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="BarBtn" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontFamily"      Value="Segoe UI"/>
+            <Setter Property="FontSize"        Value="13"/>
+            <Setter Property="FontWeight"      Value="SemiBold"/>
+            <Setter Property="Height"          Value="42"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="{TemplateBinding Background}"
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.88"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="Opacity" Value="0.72"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Window.InputBindings>
+        <KeyBinding Key="Escape" Command="ApplicationCommands.Close"/>
+        <KeyBinding Key="S" Modifiers="Ctrl" Command="ApplicationCommands.Save"/>
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="58"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="66"/>
+        </Grid.RowDefinitions>
+
+        <!-- Top Bar -->
+        <Border Grid.Row="0" Background="#1E293B">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" BlurRadius="12" ShadowDepth="2" Opacity="0.18" Direction="270"/>
+            </Border.Effect>
+            <Grid Margin="22,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/><ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="WindowTitleText" Text="✚  New Document"
+                           Foreground="#F1F5F9" FontSize="16" FontWeight="Bold"
+                           VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Load master data:" Foreground="#94A3B8"
+                               FontSize="12" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <Button Content="👥 Customers" Background="#3B4F6B" Foreground="#E2E8F0"
+                            Padding="14,0" Style="{StaticResource SmBtn}" Margin="0,0,8,0"
+                            Click="LoadCustomersCsv_Click"/>
+                    <Button Content="📦 Items" Background="#3B4F6B" Foreground="#E2E8F0"
+                            Padding="14,0" Style="{StaticResource SmBtn}"
+                            Click="LoadItemsCsv_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Scrollable form body -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="22,18,22,8">
+            <StackPanel>
+
+                <!-- Doc Meta -->
+                <Border Style="{StaticResource Sec}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/><ColumnDefinition Width="16"/>
+                            <ColumnDefinition/><ColumnDefinition Width="16"/>
+                            <ColumnDefinition/><ColumnDefinition Width="16"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Document Type" Style="{StaticResource FL}"/>
+                            <ComboBox x:Name="DocTypeCombo" SelectionChanged="DocTypeCombo_Changed"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Document No." Style="{StaticResource FL}"/>
+                            <TextBox x:Name="DocNoBox" FontWeight="SemiBold"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="Date" Style="{StaticResource FL}"/>
+                            <DatePicker x:Name="DocDatePicker" Height="40" FontSize="13"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="6">
+                            <TextBlock Text="Created By" Style="{StaticResource FL}"/>
+                            <TextBox x:Name="CreatedByBox"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Status + Ref -->
+                <Border Style="{StaticResource Sec}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/><ColumnDefinition Width="16"/>
+                            <ColumnDefinition/><ColumnDefinition Width="16"/>
+                            <ColumnDefinition/><ColumnDefinition Width="16"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Status" Style="{StaticResource FL}"/>
+                            <ComboBox x:Name="StatusCombo">
+                                <ComboBoxItem Content="Open"/>
+                                <ComboBoxItem Content="Pending"/>
+                                <ComboBoxItem Content="Complete"/>
+                                <ComboBoxItem Content="Canceled"/>
+                            </ComboBox>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Pending Amount (Rs)" Style="{StaticResource FL}"/>
+                            <TextBox x:Name="PendingAmountBox" Text="0"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="Customer PO / Ref No." Style="{StaticResource FL}"/>
+                            <TextBox x:Name="CustomerRefNoBox"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="6">
+                            <TextBlock Text="Place of Supply" Style="{StaticResource FL}"/>
+                            <TextBox x:Name="PlaceOfSupplyBox"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- E-Way Bill (conditional) -->
+                <Border x:Name="EWayBillPanel" Style="{StaticResource Sec}" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="300"/><ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="E-Way Bill No." Style="{StaticResource FL}"/>
+                            <TextBox x:Name="EWayBillNoBox"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Company Details -->
+                <Border Style="{StaticResource Sec}">
+                    <StackPanel>
+                        <TextBlock Text="🏢  Company Details" Style="{StaticResource SH}"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/><ColumnDefinition Width="16"/>
+                                <ColumnDefinition/><ColumnDefinition Width="16"/>
+                                <ColumnDefinition/><ColumnDefinition Width="16"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="10"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="0">
+                                <TextBlock Text="Company Name" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyNameBox" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="2">
+                                <TextBlock Text="Phone" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyPhoneBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="4">
+                                <TextBlock Text="GSTIN" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyGSTBox" FontFamily="Consolas" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="6">
+                                <TextBlock Text="State Code" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyStateCodeBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="0">
+                                <TextBlock Text="Email" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyEmailBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="2">
+                                <TextBlock Text="Address" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyAddressBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="4">
+                                <TextBlock Text="Authorised Signatory" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanySignatureBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="6">
+                                <TextBlock Text="Bank Name" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyBankBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="0">
+                                <TextBlock Text="Account Number" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyAccountBox" FontFamily="Consolas" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="2">
+                                <TextBlock Text="IFSC Code" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CompanyIFSCBox" FontFamily="Consolas" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="4" Grid.Column="4" Grid.ColumnSpan="3">
+                                <TextBlock Text="QR Code Image Path" Style="{StaticResource FL}"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/><ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBox x:Name="CompanyQRCodeBox" FontFamily="Consolas" FontSize="11"/>
+                                    <Button Grid.Column="1" Content="📷 Browse" Style="{StaticResource SmBtn}"
+                                            Background="#EFF6FF" Foreground="#2563EB"
+                                            Padding="10,0" Margin="6,0,0,0" Click="BrowseQRCode_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Customer Details -->
+                <Border Style="{StaticResource Sec}">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,14">
+                            <TextBlock Text="👤  Customer Details" Style="{StaticResource SH}" Margin="0"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Quick load:" Foreground="#64748B" FontSize="12"
+                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ComboBox x:Name="CustomerLoadCombo" Width="240"
+                                          SelectionChanged="CustomerCombo_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/><ColumnDefinition Width="16"/>
+                                <ColumnDefinition/><ColumnDefinition Width="16"/>
+                                <ColumnDefinition/><ColumnDefinition Width="16"/>
+                                <ColumnDefinition/><ColumnDefinition Width="16"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Customer Name" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CustNameBox" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock Text="GSTIN" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CustGSTBox" FontFamily="Consolas" FontSize="13"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="4">
+                                <TextBlock Text="State Code" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CustStateCodeBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="6">
+                                <TextBlock Text="Billing Address" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CustBillingBox"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="8">
+                                <TextBlock Text="Shipping Address" Style="{StaticResource FL}"/>
+                                <TextBox x:Name="CustShippingBox"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- Line Items -->
+                <Border Style="{StaticResource Sec}">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,12">
+                            <TextBlock Text="📦  Line Items" Style="{StaticResource SH}" Margin="0"/>
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                                <TextBlock Text="Add from master:" Foreground="#64748B" FontSize="12"
+                                           VerticalAlignment="Center" Margin="0,0,8,0"/>
+                                <ComboBox x:Name="ItemLoadCombo" Width="240"
+                                          SelectionChanged="ItemCombo_Changed"/>
+                            </StackPanel>
+                        </Grid>
+                        <DataGrid x:Name="ItemsGrid" AutoGenerateColumns="False"
+                                  CanUserAddRows="False" CanUserDeleteRows="False"
+                                  CanUserResizeRows="False" SelectionMode="Single"
+                                  SelectionUnit="FullRow" MinHeight="160" MaxHeight="320"
+                                  Background="#FFFFFF" RowBackground="#FFFFFF"
+                                  AlternatingRowBackground="#F8FAFC"
+                                  BorderBrush="#CBD5E1" BorderThickness="1"
+                                  HorizontalGridLinesBrush="#E2E8F0"
+                                  FontSize="13" Foreground="#0F172A" RowHeight="38"
+                                  CellEditEnding="ItemsGrid_CellEditEnding"
+                                  KeyDown="ItemsGrid_KeyDown">
+                            <DataGrid.ColumnHeaderStyle>
+                                <Style TargetType="DataGridColumnHeader">
+                                    <Setter Property="Background"      Value="#1E293B"/>
+                                    <Setter Property="Foreground"      Value="#E2E8F0"/>
+                                    <Setter Property="FontWeight"      Value="SemiBold"/>
+                                    <Setter Property="FontSize"        Value="12"/>
+                                    <Setter Property="Height"          Value="36"/>
+                                    <Setter Property="Padding"         Value="10,0"/>
+                                    <Setter Property="BorderBrush"     Value="#334155"/>
+                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                </Style>
+                            </DataGrid.ColumnHeaderStyle>
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="#"           Binding="{Binding ItemNumber}"  Width="40" IsReadOnly="True"/>
+                                <DataGridTextColumn Header="Description" Binding="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+                                <DataGridTextColumn Header="HSN"         Binding="{Binding HSN, UpdateSourceTrigger=PropertyChanged}"         Width="90"/>
+                                <DataGridTextColumn Header="Qty"         Binding="{Binding Quantity, UpdateSourceTrigger=PropertyChanged}"    Width="75"/>
+                                <DataGridTextColumn Header="Unit"        Binding="{Binding UOM, UpdateSourceTrigger=PropertyChanged}"         Width="70"/>
+                                <DataGridTextColumn Header="Rate (Rs)"   Binding="{Binding Rate, UpdateSourceTrigger=PropertyChanged}"        Width="110"/>
+                                <DataGridTextColumn Header="GST %"       Binding="{Binding GSTPercent, UpdateSourceTrigger=PropertyChanged}"  Width="70"/>
+                                <DataGridTextColumn Header="Line Total"  Binding="{Binding LineTotal, StringFormat=N2}" Width="110" IsReadOnly="True"/>
+                                <DataGridTemplateColumn Header="" Width="44">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Content="✕" Tag="{Binding}" Click="DeleteRow_Click"
+                                                    Background="Transparent" BorderThickness="0"
+                                                    Foreground="#EF4444" FontSize="14" FontWeight="Bold"
+                                                    Cursor="Hand" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                        <Button Content="＋  Add Row  (Insert)" Style="{StaticResource SmBtn}"
+                                Background="#EFF6FF" Foreground="#2563EB"
+                                Padding="16,0" Width="180" HorizontalAlignment="Left"
+                                Margin="0,10,0,0" Click="AddRow_Click"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Totals + Terms -->
+                <Border Style="{StaticResource Sec}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/><ColumnDefinition Width="20"/><ColumnDefinition Width="340"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Left: GST mode + freight/discount + terms -->
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="GST Mode" Style="{StaticResource SH}"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,0,0,14">
+                                <RadioButton x:Name="RbCgst" Content="CGST + SGST  (Intra-state)"
+                                             IsChecked="True" Checked="GstMode_Changed"
+                                             Foreground="#1E293B" FontSize="13" FontWeight="SemiBold"
+                                             Margin="0,0,28,0"/>
+                                <RadioButton x:Name="RbIgst" Content="IGST  (Inter-state)"
+                                             Checked="GstMode_Changed"
+                                             Foreground="#1E293B" FontSize="13" FontWeight="SemiBold"/>
+                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="180"/><ColumnDefinition Width="16"/><ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Freight (Rs)" Style="{StaticResource FL}"/>
+                                    <TextBox x:Name="FreightBox" Text="0" TextChanged="Total_Changed"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="Discount (Rs)" Style="{StaticResource FL}"/>
+                                    <TextBox x:Name="DiscountBox" Text="0" TextChanged="Total_Changed"/>
+                                </StackPanel>
+                            </Grid>
+                            <StackPanel Margin="0,12,0,0">
+                                <TextBlock Text="Load T&amp;C Template" Style="{StaticResource FL}"/>
+                                <ComboBox x:Name="TandCLoadCombo" SelectionChanged="TandCCombo_Changed"
+                                          Height="38" FontSize="12" Margin="0,0,0,12"/>
+                            </StackPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/><ColumnDefinition Width="16"/><ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Payment Terms" Style="{StaticResource FL}"/>
+                                    <TextBox x:Name="PaymentTermsBox" Height="72"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="General Terms &amp; Conditions" Style="{StaticResource FL}"/>
+                                    <TextBox x:Name="GeneralTermsBox" Height="72"
+                                             TextWrapping="Wrap" AcceptsReturn="True"
+                                             VerticalScrollBarVisibility="Auto"
+                                             VerticalContentAlignment="Top"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Right: Totals panel -->
+                        <Border Grid.Column="2" Background="#F8FAFC" CornerRadius="10"
+                                BorderBrush="#CBD5E1" BorderThickness="1" Padding="20,18">
+                            <StackPanel>
+                                <TextBlock Text="INVOICE SUMMARY" Foreground="#475569"
+                                           FontSize="11" FontWeight="Bold" Margin="0,0,0,14"/>
+                                <Grid Margin="0,0,0,8">
+                                    <TextBlock Text="Subtotal" Foreground="#64748B" FontSize="13"/>
+                                    <TextBlock x:Name="SubtotalText" HorizontalAlignment="Right"
+                                               Foreground="#1E293B" FontSize="13" FontWeight="SemiBold"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,8" x:Name="CgstRow">
+                                    <TextBlock x:Name="CgstLabel" Text="CGST" Foreground="#64748B" FontSize="13"/>
+                                    <TextBlock x:Name="CgstText" HorizontalAlignment="Right"
+                                               Foreground="#1E293B" FontSize="13"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,8" x:Name="SgstRow">
+                                    <TextBlock x:Name="SgstLabel" Text="SGST" Foreground="#64748B" FontSize="13"/>
+                                    <TextBlock x:Name="SgstText" HorizontalAlignment="Right"
+                                               Foreground="#1E293B" FontSize="13"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,8" x:Name="IgstRow" Visibility="Collapsed">
+                                    <TextBlock x:Name="IgstLabel" Text="IGST" Foreground="#64748B" FontSize="13"/>
+                                    <TextBlock x:Name="IgstText" HorizontalAlignment="Right"
+                                               Foreground="#1E293B" FontSize="13"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,8">
+                                    <TextBlock Text="Freight" Foreground="#64748B" FontSize="13"/>
+                                    <TextBlock x:Name="FreightText" HorizontalAlignment="Right"
+                                               Foreground="#1E293B" FontSize="13"/>
+                                </Grid>
+                                <Grid Margin="0,0,0,12">
+                                    <TextBlock Text="Discount" Foreground="#64748B" FontSize="13"/>
+                                    <TextBlock x:Name="DiscountText" HorizontalAlignment="Right"
+                                               Foreground="#EF4444" FontSize="13"/>
+                                </Grid>
+                                <Rectangle Height="1.5" Fill="#CBD5E1" Margin="0,0,0,12"/>
+                                <Grid Margin="0,0,0,16">
+                                    <TextBlock Text="GRAND TOTAL" Foreground="#1E293B"
+                                               FontSize="16" FontWeight="Bold"/>
+                                    <TextBlock x:Name="GrandTotalText" HorizontalAlignment="Right"
+                                               Foreground="#2563EB" FontSize="20" FontWeight="Bold"/>
+                                </Grid>
+                                <Rectangle Height="1" Fill="#E2E8F0" Margin="0,0,0,12"/>
+                                <Grid>
+                                    <TextBlock Text="GST Rate %" Foreground="#475569"
+                                               FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                                        <TextBox x:Name="GstPercentBox" Width="60" Height="36"
+                                                 Text="18" TextAlignment="Center"
+                                                 FontSize="14" FontWeight="Bold"
+                                                 TextChanged="Total_Changed"/>
+                                        <TextBlock Text=" %" Foreground="#475569" FontSize="14"
+                                                   FontWeight="SemiBold" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <!-- Bottom Bar -->
+        <Border Grid.Row="2" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0">
+            <Grid Margin="22,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/><ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="FormStatusText" Foreground="#64748B"
+                           FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="Cancel" Style="{StaticResource BarBtn}"
+                            Background="#F1F5F9" Foreground="#475569"
+                            Padding="22,0" Width="110" Margin="0,0,8,0" Click="Cancel_Click"/>
+                    <Button x:Name="PdfBtn" Content="📄  Preview PDF" Style="{StaticResource BarBtn}"
+                            Background="#F1F5F9" Foreground="#475569"
+                            Padding="16,0" Width="130" Margin="0,0,8,0" Click="OpenPdf_Click"/>
+                    <Button x:Name="HtmlBtn" Content="🌐  Preview HTML" Style="{StaticResource BarBtn}"
+                            Background="#F1F5F9" Foreground="#475569"
+                            Padding="16,0" Width="140" Margin="0,0,12,0" Click="OpenHtml_Click"/>
+                    <Button x:Name="SaveBtn" Content="✔  Save Document  (Ctrl+S)"
+                            Style="{StaticResource BarBtn}"
+                            Background="#2563EB" Foreground="White"
+                            Padding="28,0" Width="260" Click="Save_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

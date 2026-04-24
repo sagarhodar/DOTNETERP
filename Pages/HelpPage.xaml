@@ -1,0 +1,290 @@
+<UserControl x:Class="Ojaswat.Pages.HelpPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Ojaswat"
+             Background="#F1F5F9" FontFamily="Segoe UI">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="40,32,40,40">
+
+            <!-- MAIN CARD -->
+            <Border Background="#FFFFFF" CornerRadius="14" Padding="32,28"
+                    BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,20">
+
+                <StackPanel>
+
+                    <!-- HEADER -->
+                    <TextBlock Text="◈ Ojaswat ERP" Foreground="#3B82F6"
+                               FontSize="28" FontWeight="Bold" Margin="0,0,0,6"/>
+
+                    <TextBlock Foreground="#64748B" FontSize="14" Margin="0,0,0,16">
+                        <Run Text="Enterprise Resource Planning Platform — Version "/>
+                        <Run Text="{x:Static local:App.Version}"/>
+                    </TextBlock>
+
+                    <Rectangle Height="1" Fill="#E2E8F0" Margin="0,0,0,16"/>
+
+                    <!-- CAPABILITIES -->
+                    <TextBlock Text="Capabilities" Foreground="#0F172A"
+                               FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10"/>
+
+                    <StackPanel>
+
+                        <!-- SALES -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="SALES" Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Quotation Management · Sales Order Processing · GST-Compliant Invoicing · Credit Notes
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- PROCUREMENT -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="PROCUREMENT" Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Purchase Order Lifecycle · Vendor Invoicing · Goods Receipt Note (GRN) · Debit Notes
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- FINANCIALS -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="FINANCIALS" Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Payment Tracking · Automated Outstanding Adjustments · Ledger Management
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- ANALYTICS -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="ANALYTICS &amp; REPORTING" Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Document Register · GST Compliance Reports · Item Performance Insights
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- MASTER DATA -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="MASTER DATA" Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Company Profile · Customer &amp; Item Master · Terms &amp; Conditions
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- DOCUMENT ENGINE -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="DOCUMENT ENGINE" Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Modular PDF/HTML Rendering · Extensible Document Architecture
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- STACK -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="TECH STACK" Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                .NET 8 · WPF · DuckDB · CsvHelper · Headless Chrome PDF
+                            </TextBlock>
+                        </Grid>
+
+                    </StackPanel>
+
+                    <Rectangle Height="1" Fill="#E2E8F0" Margin="0,18"/>
+
+                    <!-- ARCHITECTURE -->
+                    <TextBlock Foreground="#0F172A" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,10">
+                        <Run Text="Architecture (V_"/>
+                        <Run Text="{x:Static local:App.Version}"/>
+                        <Run Text=")"/>
+                    </TextBlock>
+
+                    <StackPanel>
+
+                        <!-- PRESENTATION -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Presentation Layer"
+                                    Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Dedicated UserControls per module ensuring isolation
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- RENDERING -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Rendering Engine"
+                                    Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                IDocRenderer contract with base abstraction and document-specific implementations
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- APPLICATION -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Application Layer"
+                                    Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                MVVM-based ViewModels with command binding and state management
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- SERVICE -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Service Layer"
+                                    Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Export Engine · Document Numbering · Data Processing Utilities
+                            </TextBlock>
+                        </Grid>
+
+                        <!-- DATA -->
+                        <Grid Margin="0,3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="170"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="Data Layer"
+                                    Foreground="#475569" FontSize="12" FontWeight="SemiBold"/>
+                            <TextBlock Grid.Column="1" Foreground="#475569" FontSize="12" TextWrapping="Wrap">
+                                Version-controlled migrations with idempotent schema evolution
+                            </TextBlock>
+                        </Grid>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+            <!-- FOOTER -->
+            <Border Background="#FFFFFF" CornerRadius="14" Padding="32,28"
+                    BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,20">
+
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- LEFT CONTENT -->
+                    <StackPanel>
+
+                        <!-- Label -->
+                        <TextBlock Text="ENGINEERED &amp; DEVELOPED BY"
+                                Foreground="#64748B"
+                                FontSize="10"
+                                FontWeight="SemiBold"
+                                Margin="0,0,0,6"/>
+
+                        <!-- Name -->
+                        <TextBlock Text="Sagar Hodar"
+                                Foreground="#0F172A"
+                                FontSize="24"
+                                FontWeight="Bold"
+                                Margin="0,0,0,6"/>
+
+                        <!-- Role (optional but premium feel) -->
+                        <TextBlock Text="Software Engineer · ERP Systems"
+                                Foreground="#64748B"
+                                FontSize="12"
+                                Margin="0,0,0,12"/>
+
+                        <!-- Email pill -->
+                        <Border Background="#F8FAFC"
+                                BorderBrush="#E2E8F0"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                Padding="12,8"
+                                HorizontalAlignment="Left">
+
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="✉"
+                                        Foreground="#3B82F6"
+                                        FontSize="13"
+                                        Margin="0,0,6,0"/>
+
+                                <TextBlock Text="hodarsagar@gmail.com"
+                                        Foreground="#1D4ED8"
+                                        FontSize="13"
+                                        FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Border>
+
+                    </StackPanel>
+
+                    <!-- RIGHT AVATAR -->
+                    <Grid Grid.Column="1" VerticalAlignment="Center" Margin="24,0,0,0">
+
+                        <!-- Glow -->
+                        <Ellipse Width="90" Height="90" Opacity="0.15">
+                            <Ellipse.Fill>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="#3B82F6" Offset="0.5"/>
+                                    <GradientStop Color="Transparent" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Fill>
+                        </Ellipse>
+
+                        <!-- Avatar -->
+                        <Border Width="70" Height="70"
+                                CornerRadius="35"
+                                Background="#EFF6FF"
+                                BorderBrush="#BFDBFE"
+                                BorderThickness="1"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+
+                            <TextBlock Text="SH"
+                                    Foreground="#2563EB"
+                                    FontSize="26"
+                                    FontWeight="Bold"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"/>
+                        </Border>
+
+                    </Grid>
+
+                </Grid>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

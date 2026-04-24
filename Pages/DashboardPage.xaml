@@ -1,0 +1,129 @@
+<UserControl x:Class="Ojaswat.Pages.DashboardPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Ojaswat"
+             Background="#F1F5F9" FontFamily="Segoe UI">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="20,20,20,20">
+
+            <!-- Hero banner -->
+            <Border Background="#1E293B" CornerRadius="12" Padding="24,18" Margin="0,0,0,18">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/><ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="Welcome back 👋" Foreground="#64748B" FontSize="12"/>
+                        <TextBlock Foreground="White"
+                                   FontSize="20" FontWeight="Bold" Margin="0,3,0,0">
+                            <Run Text="Ojaswat ERP - Version "/>
+                            <Run Text="{x:Static local:App.Version}"/>
+                        </TextBlock>
+                        <TextBlock x:Name="DashDateText" Foreground="#475569"
+                                   FontSize="12" Margin="0,5,0,0"/>
+                    </StackPanel>
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <Button Content="✚  New Sales Invoice"
+                                Style="{StaticResource BtnPrimary}"
+                                Height="38" Padding="16,0" Margin="0,0,8,0"
+                                Click="Quick_NewSalesInvoice"/>
+                        <Button Content="✚  New Purchase Order"
+                                Style="{StaticResource BtnGreen}"
+                                Height="38" Padding="16,0"
+                                Click="Quick_NewPurchaseOrder"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Stats row — values set from code-behind via App.VM (DataContext = string here) -->
+            <Grid Margin="0,0,0,18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/><ColumnDefinition/><ColumnDefinition/>
+                    <ColumnDefinition/><ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Text="Total Docs" Foreground="#64748B" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="StatTotal" Text="0"
+                                   Foreground="#0F172A" FontSize="30" FontWeight="Bold"/>
+                        <TextBlock Text="All time" Foreground="#94A3B8" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Text="Sales Docs" Foreground="#64748B" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="StatSales" Text="0"
+                                   Foreground="#3B82F6" FontSize="30" FontWeight="Bold"/>
+                        <TextBlock Text="Quotation+Order+Invoice" Foreground="#94A3B8" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="2" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Text="Purchase Docs" Foreground="#64748B" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="StatPurchase" Text="0"
+                                   Foreground="#10B981" FontSize="30" FontWeight="Bold"/>
+                        <TextBlock Text="PO+Invoice+GRN" Foreground="#94A3B8" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="3" Style="{StaticResource StatCard}">
+                    <StackPanel>
+                        <TextBlock Text="Pending Amount" Foreground="#64748B" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="StatPending" Text="₹0"
+                                   Foreground="#D97706" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="Outstanding" Foreground="#94A3B8" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="4" Style="{StaticResource StatCard}" Margin="0">
+                    <StackPanel>
+                        <TextBlock Text="Payments" Foreground="#64748B" FontSize="11" Margin="0,0,0,4"/>
+                        <TextBlock x:Name="StatPayments" Text="₹0"
+                                   Foreground="#059669" FontSize="24" FontWeight="Bold"/>
+                        <TextBlock Text="Received" Foreground="#94A3B8" FontSize="10"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- Recent documents — ItemsSource set from code-behind -->
+            <Border Background="#FFFFFF" CornerRadius="12"
+                    BorderBrush="#E2E8F0" BorderThickness="1" Margin="0,0,0,16">
+                <StackPanel>
+                    <Grid Margin="18,14,18,10">
+                        <TextBlock Text="Recent Documents"
+                                   Foreground="#0F172A" FontSize="13" FontWeight="SemiBold"/>
+                        <Button Content="View All →" HorizontalAlignment="Right"
+                                Style="{StaticResource BtnGhost}"
+                                Height="28" Padding="10,0" FontSize="11"
+                                Click="ViewAll_Click"/>
+                    </Grid>
+                    <DataGrid x:Name="RecentGrid" MaxHeight="260" BorderThickness="0"
+                              IsReadOnly="True" SelectionMode="Single"
+                              MouseDoubleClick="RecentGrid_DoubleClick">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Document No"  Binding="{Binding DocumentNo}"   Width="145"/>
+                            <DataGridTextColumn Header="Type"         Binding="{Binding DocTypeLabel}" Width="130"/>
+                            <DataGridTextColumn Header="Party"        Binding="{Binding CustomerName}" Width="*"/>
+                            <DataGridTextColumn Header="Date"         Binding="{Binding DateLabel}"    Width="100"/>
+                            <DataGridTextColumn Header="Total"
+                                                Binding="{Binding GrandTotal, StringFormat='₹{0:N2}'}"
+                                                Width="110"/>
+                            <DataGridTemplateColumn Header="Status" Width="100">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{Binding StatusColor}" CornerRadius="4"
+                                                Padding="8,2" HorizontalAlignment="Left" Margin="0,4">
+                                            <TextBlock Text="{Binding StatusLabel}"
+                                                       Foreground="White" FontSize="10" FontWeight="SemiBold"/>
+                                        </Border>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

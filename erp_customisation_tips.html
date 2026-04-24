@@ -1,0 +1,204 @@
+
+<style>
+.tip-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);margin-bottom:12px;overflow:hidden}
+.tip-header{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;user-select:none;border-bottom:0.5px solid transparent;transition:border-color .2s}
+.tip-header.open{border-color:var(--color-border-tertiary)}
+.tip-num{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.tip-title{font-size:14px;font-weight:500;color:var(--color-text-primary);flex:1}
+.tip-file{font-size:11px;color:var(--color-text-tertiary);font-family:var(--font-mono);margin-left:auto;padding-right:8px}
+.tip-arrow{font-size:12px;color:var(--color-text-tertiary);transition:transform .2s}
+.tip-arrow.open{transform:rotate(90deg)}
+.tip-body{display:none;padding:0 16px 16px}
+.tip-body.open{display:block}
+.tip-desc{font-size:13px;color:var(--color-text-secondary);margin:10px 0 8px;line-height:1.6}
+.code-block{background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;font-family:var(--font-mono);font-size:12px;color:var(--color-text-primary);white-space:pre;overflow-x:auto;line-height:1.7}
+.code-label{font-size:11px;color:var(--color-text-tertiary);margin:10px 0 4px;text-transform:uppercase;letter-spacing:.05em}
+.ask-btn{margin-top:10px;font-size:12px;color:var(--color-text-info);background:var(--color-background-info);border:0.5px solid var(--color-border-info);border-radius:var(--border-radius-md);padding:5px 12px;cursor:pointer}
+</style>
+
+<h2 class="sr-only">Ojaswat ERP quick customisation tips — click each card to expand the code</h2>
+
+<div id="tips"></div>
+
+<script>
+const tips = [
+  {
+    num:"01", color:"#E6F1FB", numColor:"#0C447C",
+    title:"Change logo to app install folder",
+    file:"InvoiceSettings.cs",
+    desc:"By default LogoPath is empty. Point it to a path relative to the app executable so the logo works on any machine without an absolute path.",
+    before:`public const string LogoPath = @"";`,
+    after:`public const string LogoPath =
+    Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory,
+        "Resources", "logo.png");`,
+    ask:"Write the full InvoiceSettings.cs LogoPath change for install-relative path"
+  },
+  {
+    num:"02", color:"#E1F5EE", numColor:"#085041",
+    title:"Add a new sidebar menu item",
+    file:"MainWindow.xaml + MainViewModel.cs",
+    desc:"Two edits — one line each. Add the nav command in the VM constructor, then add a RadioButton in the sidebar XAML.",
+    before:`// MainViewModel.cs constructor — add after NavHelpCommand line:
+NavPLCommand = NavCmd("pl", "Profit & Loss");
+
+// MainWindow.xaml — add inside sidebar ScrollViewer:
+<RadioButton Content="  P  Profit & Loss"
+             Style="{StaticResource NavRadioBtn}"
+             Command="{Binding NavPLCommand}"/>`,
+    after:`// MainWindow.xaml — also register the DataTemplate:
+<DataTemplate x:Key="DT_pl">
+    <pages:PLReportPage/>
+</DataTemplate>`,
+    ask:"Write the complete steps to add a Profit & Loss menu item to Ojaswat ERP"
+  },
+  {
+    num:"03", color:"#FAEEDA", numColor:"#633806",
+    title:"Change document number format",
+    file:"DocumentNumberService.cs",
+    desc:"The current format is PREFIX-YYYY-NNNN (e.g. SI-2025-0001). Change the year or sequence width by editing one line in Generate().",
+    before:`string cand = $"{prefix}-{year}-{seq:D4}";`,
+    after:`// Financial year format: SI-25-26-0001
+string fy   = $"{DateTime.Now:yy}-{(DateTime.Now.Month>=4
+              ? DateTime.Now.Year-1999
+              : DateTime.Now.Year-2000):D2}";
+string cand = $"{prefix}-{fy}-{seq:D4}";`,
+    ask:"Show me how to use financial year in the document number format"
+  },
+  {
+    num:"04", color:"#FAECE7", numColor:"#712B13",
+    title:"Add a month-wise sales report page",
+    file:"New file: Pages/MonthReportPage.xaml.cs",
+    desc:"The GST report already groups by month. A month-wise sales summary reuses the same SQL with a WHERE on DocType. Whole page in ~30 lines.",
+    before:`// SQL to add inside the new page's Load() method:
+SELECT substr(DocDate,1,7) AS Month,
+       COUNT(*)            AS Docs,
+       SUM(GrandTotal)     AS Revenue,
+       SUM(PendingAmount)  AS Outstanding
+FROM ErpDocuments
+WHERE DocType IN ('SalesInvoice','SalesOrder')
+GROUP BY Month
+ORDER BY Month DESC;`,
+    after:`// Wire it up in MainViewModel.cs:
+NavMonthReportCommand = NavCmd("monthreport","Monthly Sales");
+
+// MainWindow.xaml DataTemplate:
+<DataTemplate x:Key="DT_monthreport">
+    <pages:MonthReportPage/>
+</DataTemplate>`,
+    ask:"Write the complete MonthReportPage.xaml and .cs for a month-wise sales report"
+  },
+  {
+    num:"05", color:"#EEEDFE", numColor:"#3C3489",
+    title:"Move Save button to top bar",
+    file:"CreateDocumentWindow.xaml",
+    desc:"The Save button is in the bottom bar. Cut the Button XAML and paste it into the top Bar Grid. No C# change needed — Click handler stays the same.",
+    before:`<!-- Top bar currently only shows title + Load buttons -->
+<TextBlock x:Name="WindowTitleText" .../>`,
+    after:`<!-- Add Save button to top bar Grid Column 1 -->
+<Button x:Name="SaveBtn"
+        Content="Save  (Ctrl+S)"
+        Background="#2563EB" Foreground="White"
+        Height="36" Padding="18,0"
+        Grid.Column="1"
+        Click="Save_Click"
+        Style="{StaticResource SmBtn}"/>`,
+    ask:"Show the exact XAML diff to move the Save button to the top bar in CreateDocumentWindow"
+  },
+  {
+    num:"06", color:"#EAF3DE", numColor:"#27500A",
+    title:"Add a P&L report (revenue minus purchases)",
+    file:"New SQL + New Page",
+    desc:"DuckDB can compute this in one query — no new tables needed. Revenue from SalesInvoice rows, COGS from PurchaseInvoice rows, grouped by month.",
+    before:`SELECT
+  substr(DocDate,1,7)                AS Month,
+  SUM(CASE WHEN DocType='SalesInvoice'
+       THEN GrandTotal ELSE 0 END)   AS Revenue,
+  SUM(CASE WHEN DocType='PurchaseInvoice'
+       THEN GrandTotal ELSE 0 END)   AS COGS,
+  SUM(CASE WHEN DocType='SalesInvoice'
+       THEN GrandTotal ELSE 0 END) -
+  SUM(CASE WHEN DocType='PurchaseInvoice'
+       THEN GrandTotal ELSE 0 END)   AS GrossProfit
+FROM ErpDocuments
+GROUP BY Month ORDER BY Month DESC;`,
+    after:`// Bind to a DataGrid with columns:
+// Month | Revenue | COGS | Gross Profit
+// Add to ErpDocumentDbService.cs as GetPLReport()`,
+    ask:"Write the complete PLReportPage and GetPLReport() service method for Ojaswat ERP"
+  },
+  {
+    num:"07", color:"#F1EFE8", numColor:"#444441",
+    title:"Change default GST rate to 12%",
+    file:"InvoiceSettings.cs + DocumentViewModel.cs",
+    desc:"GST defaults to 18% in two places. Change both so every new document opens with 12%.",
+    before:`// DocumentViewModel.cs line ~60:
+private decimal _gstPercent = 18;
+
+// DocumentViewModel.cs SetDefaults():
+GstPercent = 18;`,
+    after:`// Change both to 12:
+private decimal _gstPercent = 12;
+
+GstPercent = 12;
+
+// Also update the XAML default text in
+// CreateDocumentWindow.xaml GstPercentBox:
+<TextBox x:Name="GstPercentBox" Text="12" .../>`,
+    ask:"Show every file I need to edit to change the default GST rate to 12%"
+  },
+  {
+    num:"08", color:"#FBEAF0", numColor:"#72243E",
+    title:"Change sidebar accent colour",
+    file:"Resources/Colors.xaml",
+    desc:"One line change. The Accent brush controls sidebar highlights and all BtnPrimary buttons. Change to any hex colour and rebuild.",
+    before:`<SolidColorBrush x:Key="Accent"    Color="#3B82F6"/>
+<SolidColorBrush x:Key="AccentHov" Color="#2563EB"/>`,
+    after:`<!-- Deep green theme -->
+<SolidColorBrush x:Key="Accent"    Color="#059669"/>
+<SolidColorBrush x:Key="AccentHov" Color="#047857"/>
+
+<!-- Or deep orange -->
+<SolidColorBrush x:Key="Accent"    Color="#EA580C"/>
+<SolidColorBrush x:Key="AccentHov" Color="#C2410C"/>`,
+    ask:"What other colors do I need to update to fully change the Ojaswat ERP theme colour?"
+  }
+];
+
+const container = document.getElementById('tips');
+
+tips.forEach((t, i) => {
+  const card = document.createElement('div');
+  card.className = 'tip-card';
+
+  card.innerHTML = `
+    <div class="tip-header" id="hdr${i}" onclick="toggle(${i})">
+      <span class="tip-num" style="background:${t.color};color:${t.numColor}">${t.num}</span>
+      <span class="tip-title">${t.title}</span>
+      <span class="tip-file">${t.file}</span>
+      <span class="tip-arrow" id="arr${i}">&#9654;</span>
+    </div>
+    <div class="tip-body" id="bdy${i}">
+      <p class="tip-desc">${t.desc}</p>
+      <div class="code-label">change</div>
+      <div class="code-block">${escHtml(t.before)}</div>
+      <div class="code-label">to</div>
+      <div class="code-block">${escHtml(t.after)}</div>
+      <button class="ask-btn" onclick="sendPrompt('${t.ask.replace(/'/g,"\\'")}')">Ask Claude to write this code &#8599;</button>
+    </div>`;
+
+  container.appendChild(card);
+});
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+function toggle(i){
+  const hdr = document.getElementById('hdr'+i);
+  const bdy = document.getElementById('bdy'+i);
+  const arr = document.getElementById('arr'+i);
+  const open = bdy.classList.contains('open');
+  bdy.classList.toggle('open',!open);
+  hdr.classList.toggle('open',!open);
+  arr.classList.toggle('open',!open);
+}
+</script>

@@ -1,0 +1,4 @@
+Id,Name,GSTIN,BillingAddress,ShippingAddress,StateCode
+3,AKSHI ENTERPRISE,27AKSHI0000A1Z3,"Shop 5, Market Yard, Mumbai - 400001","Shop 5, Market Yard, Mumbai - 400001",27-Maharashtra
+1,NOKIA CORPORATION,27NOKIA0000N1Z1,"Nokia HQ, Helsinki, RAJKOT","Nokia HQ, Helsinki, RAJKOT",24-Gujarat
+2,OJASWAT ENTERPRISE,27OJASW0000O1Z2,"Plot 12, MIDC, Pune - 411018","Nokia HQ, Helsinki, RAJKOT",27-Maharashtra

@@ -1,0 +1,81 @@
+c:\SAGAR\CODING\DOTNET\ERP\8\Phase03\InvoiceApp_V33
+├── App.xaml
+├── App.xaml.cs
+├── Database/
+│   ├── DbInitializer.cs
+│   └── Migrations/
+│       ├── DbMigration_001.cs
+│       ├── DbMigration_002.cs
+│       └── DbMigration_003.cs
+├── InvoiceSettings.cs
+├── Models/
+│   ├── Models.cs
+│   └── ViewModels/
+│       ├── DocListViewModel.cs
+│       ├── DocumentViewModel.cs
+│       ├── FinanceViewModel.cs
+│       ├── MainViewModel.cs
+│       ├── MasterDataViewModel.cs
+│       └── RelayCommand.cs
+├── Ojaswat.csproj
+├── Ojaswat.sln
+├── PageTemplateSelector.cs
+├── Pages/
+│   ├── ConfigPage.xaml
+│   ├── ConfigPage.xaml.cs
+│   ├── DashboardPage.xaml
+│   ├── DashboardPage.xaml.cs
+│   ├── DocumentListPage.xaml
+│   ├── DocumentListPage.xaml.cs
+│   ├── FinancePage.xaml
+│   ├── FinancePage.xaml.cs
+│   ├── GstReportPage.xaml
+│   ├── GstReportPage.xaml.cs
+│   ├── HelpPage.xaml
+│   ├── HelpPage.xaml.cs
+│   ├── InventoryPage.xaml
+│   ├── InventoryPage.xaml.cs
+│   ├── LedgerPage.xaml
+│   ├── LedgerPage.xaml.cs
+│   ├── MasterDataPage.xaml
+│   ├── MasterDataPage.xaml.cs
+│   ├── ReportItemsPage.xaml
+│   ├── ReportItemsPage.xaml.cs
+│   ├── TandCPage.xaml
+│   └── TandCPage.xaml.cs
+├── Renderers/
+│   ├── CreditNoteRenderer.cs
+│   ├── DebitNoteRenderer.cs
+│   ├── DefaultRenderer.cs
+│   ├── GrnRenderer.cs
+│   ├── IDocRenderer.cs
+│   ├── PurchaseInvoiceRenderer.cs
+│   ├── PurchaseOrderRenderer.cs
+│   ├── QuotationRenderer.cs
+│   ├── RendererBase.cs
+│   ├── SalesInvoiceRenderer.cs
+│   └── SalesOrderRenderer.cs
+├── Resources/
+│   ├── Colors.xaml
+│   ├── Styles.xaml
+│   └── app.ico
+├── Services/
+│   ├── CsvService.cs
+│   ├── DocumentNumberService.cs
+│   ├── DuckDbService.cs
+│   ├── ErpDocumentDbService.cs
+│   ├── ExportService.cs
+│   └── InventoryService.cs
+└── Windows/
+    ├── CreateDocumentWindow.xaml
+    ├── CreateDocumentWindow.xaml.cs
+    ├── MainWindow.xaml
+    ├── MainWindow.xaml.cs
+    ├── PaymentEntryWindow.xaml
+    ├── PaymentEntryWindow.xaml.cs
+    ├── QuickEditWindow.xaml
+    ├── QuickEditWindow.xaml.cs
+    ├── StockAdjustmentWindow.xaml
+    ├── StockAdjustmentWindow.xaml.cs
+    ├── TandCEditorWindow.xaml
+    └── TandCEditorWindow.xaml.cs
